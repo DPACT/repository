@@ -10,15 +10,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; else pip install pytest httpx; fi
+            python -m pip install --upgrade pip
+            if [ -f requirements-dev.txt ]; then
+              pip install -r requirements-dev.txt
+            elif [ -f requirements.txt ]; then
+              pip install -r requirements.txt
+            else
+              echo "No requirements file found. Installing minimal test deps."
+              pip install pytest httpx
+            fi
 
       - name: Run tests
         run: python -m pytest tests/

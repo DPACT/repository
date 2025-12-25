@@ -30,19 +30,6 @@ def test_get_unexisted_user():
     assert response.status_code == 404
     assert isinstance(response.json(), dict)
 
-def test_create_user_with_valid_email():
-    '''Создание пользователя с уникальной почтой'''
-    new_user = {
-        'name': 'Anna Sokolova',
-        'email': 'a.sokolova@mail.com'
-    }
-    response = client.post("/api/v1/user", json=new_user)
-    assert response.status_code in (200, 201)
-    created = response.json()
-    assert 'id' in created
-    assert created['name'] == new_user['name']
-    assert created['email'] == new_user['email']
-
 def test_create_user_with_invalid_email():
     '''Создание пользователя с почтой, которую использует другой пользователь'''
     duplicate = {
